@@ -1,0 +1,8 @@
+name: rosatorrent
+channels:
+  - defaults
+dependencies:
+  - python=3.11.0
+  - pip=22.2.2
+  - pip:
+    - bencode-py==4.0.0
