@@ -1,2 +1,0 @@
-class ThreadHandler(threading.Thread):
-    

@@ -1,22 +1,28 @@
+import threading
 from .StateManager import StateManager
-from .ThreadHandler import ThreadHandler
 
-class ThreadingManager:
-    def __init__():
+class ThreadingManager(threading.Thread):
+    def __init__(self, max_threads=4):
+        super().__init__()
         self.state = StateManager()
         self.active_threads = []
+        self.max_threads = max_threads
         
-    def run(max_threads=4):
+    def run(self):
         while True:
-            if len(self.active_threads) < max_threads:
-                thread_properties = self.state.get_task()
-                thread_handler = ThreadHandler(thread_properties=thread_properties)
+            print("Awaiting New Processes")
+            if len(self.active_threads) < self.max_threads:
+                priority, thread_handler = self.state.task
+                thread_handler.run()
                 self.active_threads.append(thread_handler)
+                print("Got a Process")
             
             completed_threads = []
             for tidx, thread_handler in enumerate(self.active_threads):
                 if not thread_handler.is_alive():
+                    print("process complete")
                     completed_threads.append(tidx)
+                    del self.state.task
             self.active_threads = [th for ti, th in enumerate(self.active_threads) if ti not in completed_threads]
             
         self.state.cleanup()
